@@ -4,7 +4,6 @@ import cors from 'cors';
 import ErrorHandler from './middlewares/error-handler';
 import urlKeyRouter from './routes/url-key.route';
 import { connectDB } from './services/db.service';
-import UrlKeyPopulator from './services/url-key-populator.service';
 
 const app: Express = express();
 app.use(express.json());
@@ -29,7 +28,6 @@ start().then(() => {
 
 async function start(): Promise<void> {
   await connectDB();
-  await UrlKeyPopulator.populateUrlKeys();
   app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}`);
   });
