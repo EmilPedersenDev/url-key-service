@@ -1,12 +1,16 @@
 import { UrlKey } from '../models/url-key.model';
 import { NotFoundError } from '../common/errors';
+import CacheService from './cache.service';
 
 class UrlKeyService {
-  constructor() {}
+  private readonly cacheService: CacheService;
+  constructor(cacheService: CacheService) {
+    this.cacheService = cacheService;
+  }
 
-  public async getUrlKey(): Promise<UrlKey> {
-    const urlKey: UrlKey | null = await UrlKey.findOne({ used: false });
-    if (!urlKey?.hash) {
+  public async getUrlKey(): Promise<string> {
+    const urlKey: string | null = await this.cacheService.getHashFromCache();
+    if (!urlKey) {
       throw new NotFoundError('No url key was provided.');
     }
     return urlKey;
